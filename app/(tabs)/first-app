@@ -1,0 +1,8 @@
+                        React Native First Class
+
+1.React = "Div" | React-Native= "View"
+ for main container
+2.React = "P, Span" | React-Native= "Text"
+For Paragraph and description
+3.React = "button" | React-Native= "Button"
+native ke andar hm ik attr pass krte h jo us button ke title ko show krta h wo title attr h.
