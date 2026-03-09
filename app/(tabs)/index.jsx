@@ -96,10 +96,8 @@
 //     position: 'absolute',
 //   },
 // });
-
-
 import { useEffect, useState } from 'react'
-import { Button, Text, TextInput, View, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { Text, TextInput, View, ActivityIndicator, TouchableOpacity } from 'react-native'
 
 const Index = () => {
 
@@ -107,6 +105,7 @@ const Index = () => {
   const [todos, setTodos] = useState([])
   const [Loading, setLoading] = useState(true);
   const [Edit, setEdit] = useState(null)
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -115,14 +114,12 @@ const Index = () => {
 
   if (Loading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={{ flex:1, justifyContent:"center", alignItems:"center", backgroundColor:"#f3f4f6" }}>
+        <ActivityIndicator size="large" color="#6366f1" />
       </View>
     )
   }
-  console.log(todos)
 
-  // Add Todo Function
   const handleAddTodo = () => {
     if (todo.trim() === "") {
       alert("Please Enter a Valid Todo!");
@@ -132,100 +129,170 @@ const Index = () => {
     setTodo("")
   }
 
-  // Edit Todo Function
   const handleEditTodo = (id) => {
-    setEdit(true)
+    setEdit(id)
     setTodo(todos[id])
   }
-  const handleSaveTodo=()=>{
+
+  const handleSaveTodo = () => {
     const updatedTodos = [...todos];
-    updatedTodos[Edit]=todo;
+    updatedTodos[Edit] = todo;
     setTodos(updatedTodos);
     setEdit(null);
   }
-const handleDelTodo = (item) => {
-  const removeTodo=todos.filter((todo)=>todo!==item)
-  setTodos(removeTodo)
-}
+
+  const handleDelTodo = (item) => {
+    const removeTodo = todos.filter((todo)=>todo !== item)
+    setTodos(removeTodo)
+  }
 
   return (
 
-    <View style={{ flex: 1, padding: 20, backgroundColor: "#f5f5f5" }}>
+    <View style={{ flex:1, padding:22, backgroundColor:"#f3f4f6" }}>
+
+      {/* Header */}
       <Text style={{
-        fontSize: 28,
-        fontWeight: "bold",
-        textAlign: "center",
-        marginBottom: 25,
-        color: "#333"
+        fontSize:34,
+        fontFamily:"Arial",
+        fontWeight:"600",
+        textAlign:"center",
+        marginBottom:30,
+        color:"#111827",
+        // letterSpacing:1
       }}>
-        Todo App
+        Todo App ✨
       </Text>
 
-      <TextInput
-        placeholder="Enter your todo..."
-        value={todo}
-        onChangeText={setTodo}
-        style={{
-          backgroundColor: "#fff",
-          padding: 14,
-          borderRadius: 10,
-          fontSize: 16,
-          marginBottom: 15,
-          borderWidth: 1,
-          borderColor: "#e5e5e5"
-        }}
-      />
+      {/* Input Card */}
+      <View style={{
+        backgroundColor:"#fff",
+        borderRadius:18,
+        padding:16,
+        shadowColor:"#000",
+        shadowOpacity:0.08,
+        shadowRadius:10,
+        elevation:5
+      }}>
 
-      <Button title="Add Todo" onPress={handleAddTodo} />
+        <TextInput
+          placeholder="Write something to do..."
+          value={todo}
+          onChangeText={setTodo}
+          style={{
+            fontSize:16,
+            paddingVertical:8,
+            color:"#111"
+          }}
+        />
 
-      <View style={{ marginTop: 25 }}>
+        <TouchableOpacity
+          onPress={handleAddTodo}
+          style={{
+            marginTop:12,
+            backgroundColor:"#6366f1",
+            paddingVertical:12,
+            borderRadius:10,
+            alignItems:"center"
+          }}
+        >
+          <Text style={{color:"#fff", fontWeight:"600"}}>Add Todo</Text>
+        </TouchableOpacity>
+
+      </View>
+
+      {/* Todo List */}
+      <View style={{ marginTop:28 }}>
+
         {todos.length === 0 ? (
-          <Text>No todos yet!</Text>
+          <Text style={{textAlign:"center", color:"#6b7280", fontSize:15}}>
+            No todos yet. Start adding something 🌱
+          </Text>
         ) : (
           todos.map((item, id) => (
-            
+
             <View
               key={id}
               style={{
-                backgroundColor: "#fff",
-                padding: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                elevation: 2
+                backgroundColor:"#fff",
+                padding:18,
+                borderRadius:18,
+                marginBottom:14,
+                flexDirection:"row",
+                justifyContent:"space-between",
+                alignItems:"center",
+                shadowColor:"#000",
+                shadowOpacity:0.06,
+                shadowRadius:8,
+                elevation:4
               }}
             >
-              {Edit===id  ? (<TextInput placeholder='Edit Your Todo' value={todo} onChangeText={setTodo}/>):(
-                <Text style={{ fontSize: 16 }}>{item}</Text>
+
+              {Edit === id ? (
+                <TextInput
+                  value={todo}
+                  onChangeText={setTodo}
+                  style={{
+                    fontSize:16,
+                    flex:1,
+                    paddingVertical:4
+                  }}
+                />
+              ) : (
+                <Text style={{
+                  fontSize:16,
+                  color:"#1f2937",
+                  flex:1
+                }}>
+                  {item}
+                </Text>
               )}
 
-              <View style={{ flexDirection: "row", gap: 10 }}>
-                
+              <View style={{ flexDirection:"row", gap:10 }}>
+
                 <TouchableOpacity
-                  style={{ backgroundColor: "#4CAF50", padding: 6, borderRadius: 6 }}
+                  onPress={()=>{
+                    if(Edit===id){
+                      setEdit(false)
+                      handleSaveTodo()
+                    }else{
+                      handleEditTodo(id)
+                    }
+                  }}
+                  style={{
+                    backgroundColor:"#10b981",
+                    paddingVertical:6,
+                    paddingHorizontal:12,
+                    borderRadius:8
+                  }}
                 >
-                  {Edit===id ? ( <Button title="Save" style={{ color: "#fff" }} onPress={() =>{
-                    setEdit(false)
-                    handleSaveTodo()
-                  }} /> ):(
-                  <Button title="Edit" style={{ color: "#fff" }} onPress={() => handleEditTodo(id)} />)}
+                  <Text style={{color:"#fff", fontSize:13}}>
+                    {Edit===id ? "Save" : "Edit"}
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                   style={{ backgroundColor: "#f44336", padding: 6, borderRadius: 6 }}
+                  onPress={()=>handleDelTodo(item)}
+                  style={{
+                    backgroundColor:"#ef4444",
+                    paddingVertical:6,
+                    paddingHorizontal:12,
+                    borderRadius:8
+                  }}
                 >
-                  <Button title="Delete" style={{ color: "#fff" }} onPress={() => handleDelTodo(item)} />
-
+                  <Text style={{color:"#fff", fontSize:13}}>Delete</Text>
                 </TouchableOpacity>
+
               </View>
 
             </View>
+
           ))
         )}
+
       </View>
+
     </View>
   )
 }
+
 export default Index
